@@ -177,7 +177,7 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
                         <div className="grid gap-4 py-4">
                           <Textarea
                             id="notes"
-                            value={editingNote?.notes}
+                            value={editingNote?.notes || ''}
                             onChange={(e) =>
                               editingNote && setEditingNote({ ...editingNote, notes: e.target.value })
                             }
@@ -191,7 +191,17 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
                               Cancel
                             </Button>
                           </DialogClose>
-                          <Button type="submit" onClick={handleSaveNote}>Save changes</Button>
+                          <DialogClose asChild>
+                            <Button 
+                              type="button" 
+                              onClick={(e) => {
+                                e.preventDefault();
+                                handleSaveNote();
+                              }}
+                            >
+                              Save changes
+                            </Button>
+                          </DialogClose>
                         </DialogFooter>
                       </DialogContent>
                     </Dialog>
