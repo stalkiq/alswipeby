@@ -30,9 +30,7 @@ import { PlusCircle, Trash2, Save, Loader2, FileText } from 'lucide-react';
 
 const columns: { id: keyof Omit<BusinessData, 'docId' | 'notes'>; label: string }[] = [
     { id: 'businessName', label: 'Business Name' },
-    { id: 'street', label: 'Street' },
-    { id: 'city', label: 'City' },
-    { id: 'zip', label: 'ZIP' },
+    { id: 'address', label: 'Address' },
     { id: 'phone', label: 'Phone' },
     { id: 'category', label: 'Category' },
     { id: 'facebookUrl', label: 'Facebook URL' },
@@ -68,9 +66,7 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
     const newRow: BusinessData = {
       docId: '', // Will be generated on save
       businessName: '',
-      street: '',
-      city: '',
-      zip: '',
+      address: '',
       phone: '',
       category: '',
       facebookUrl: '',

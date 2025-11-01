@@ -93,9 +93,7 @@ let mockDatabase: BusinessData[] = [
   {
     docId: '1',
     businessName: 'The Coffee Shop',
-    street: '123 Main St',
-    city: 'Anytown',
-    zip: '12345',
+    address: '123 Main St, Anytown, 12345',
     phone: '555-1234',
     category: 'Coffee',
     facebookUrl: 'https://facebook.com/coffeeshop',
@@ -109,9 +107,7 @@ let mockDatabase: BusinessData[] = [
   {
     docId: '2',
     businessName: 'Bookworm Reads',
-    street: '456 Oak Ave',
-    city: 'Reader-ville',
-    zip: '54321',
+    address: '456 Oak Ave, Reader-ville, 54321',
     phone: '555-5678',
     category: 'Books',
     facebookUrl: '',
