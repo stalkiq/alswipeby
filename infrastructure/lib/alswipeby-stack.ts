@@ -6,6 +6,9 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as iam from 'aws-cdk-lib/aws-iam';
+import * as events from 'aws-cdk-lib/aws-events';
+import * as targets from 'aws-cdk-lib/aws-events-targets';
+import * as cloudwatch from 'aws-cdk-lib/aws-cloudwatch';
 import { Construct } from 'constructs';
 import * as path from 'path';
 
@@ -140,6 +143,140 @@ export class AlswipebyStack extends cdk.Stack {
     websiteBucket.grantRead(originAccessIdentity);
 
     // ==========================================
+    // S3 Bucket for Backups
+    // ==========================================
+    const backupBucket = new s3.Bucket(this, 'BackupBucket', {
+      bucketName: `alswipeby-backups-${this.account}`,
+      removalPolicy: cdk.RemovalPolicy.RETAIN,
+      autoDeleteObjects: false,
+      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+      encryption: s3.BucketEncryption.S3_MANAGED,
+      versioned: true,
+      lifecycleRules: [
+        {
+          id: 'DeleteOldBackups',
+          expiration: cdk.Duration.days(90), // Keep backups for 90 days
+          enabled: true,
+        },
+      ],
+    });
+
+    // ==========================================
+    // Lambda Function for Daily Backups
+    // ==========================================
+    const backupLambdaRole = new iam.Role(this, 'BackupLambdaRole', {
+      assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
+      managedPolicies: [
+        iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
+      ],
+    });
+
+    // Grant permissions for backup
+    businessTable.grantReadData(backupLambdaRole);
+    backupBucket.grantWrite(backupLambdaRole);
+    backupLambdaRole.addToPolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        actions: [
+          'dynamodb:ExportTableToPointInTime',
+          'dynamodb:DescribeExport',
+        ],
+        resources: [businessTable.tableArn],
+      })
+    );
+
+    const backupLambda = new lambda.Function(this, 'BackupFunction', {
+      functionName: 'alswipeby-daily-backup',
+      runtime: lambda.Runtime.NODEJS_20_X,
+      handler: 'index.handler',
+      code: lambda.Code.fromAsset(path.join(__dirname, '../lambda/daily-backup')),
+      environment: {
+        TABLE_NAME: businessTable.tableName,
+        TABLE_ARN: businessTable.tableArn,
+        BACKUP_BUCKET: backupBucket.bucketName,
+      },
+      timeout: cdk.Duration.minutes(15), // Export can take time
+      memorySize: 512,
+      role: backupLambdaRole,
+    });
+
+    // ==========================================
+    // EventBridge Rule - Daily Backup at 2 AM UTC
+    // ==========================================
+    const backupRule = new events.Rule(this, 'DailyBackupRule', {
+      schedule: events.Schedule.cron({ hour: '2', minute: '0' }), // 2 AM UTC daily
+      description: 'Daily backup of DynamoDB table',
+    });
+
+    backupRule.addTarget(new targets.LambdaFunction(backupLambda));
+
+    // ==========================================
+    // CloudWatch Alarms
+    // ==========================================
+    
+    // Alarm for high API usage
+    const apiAlarm = new cloudwatch.Alarm(this, 'HighAPIUsageAlarm', {
+      alarmName: 'AlswipebyHighAPIUsage',
+      alarmDescription: 'Alert when API Gateway receives more than 1000 requests per hour',
+      metric: new cloudwatch.Metric({
+        namespace: 'AWS/ApiGateway',
+        metricName: 'Count',
+        dimensionsMap: {
+          ApiName: api.restApiName,
+        },
+        period: cdk.Duration.hours(1),
+        statistic: 'Sum',
+      }),
+      threshold: 1000,
+      evaluationPeriods: 1,
+      comparisonOperator: cloudwatch.ComparisonOperator.GREATER_THAN_THRESHOLD,
+    });
+
+    // Alarm for Lambda errors - Get function
+    const lambdaErrorAlarmGet = new cloudwatch.Alarm(this, 'LambdaErrorAlarmGet', {
+      alarmName: 'AlswipebyLambdaErrorsGet',
+      alarmDescription: 'Alert when GET Lambda function has errors',
+      metric: getBusinessDataLambda.metricErrors({
+        period: cdk.Duration.minutes(5),
+        statistic: 'Sum',
+      }),
+      threshold: 5,
+      evaluationPeriods: 1,
+      comparisonOperator: cloudwatch.ComparisonOperator.GREATER_THAN_THRESHOLD,
+    });
+
+    // Alarm for Lambda errors - Save function
+    const lambdaErrorAlarmSave = new cloudwatch.Alarm(this, 'LambdaErrorAlarmSave', {
+      alarmName: 'AlswipebyLambdaErrorsSave',
+      alarmDescription: 'Alert when SAVE Lambda function has errors',
+      metric: saveBusinessDataLambda.metricErrors({
+        period: cdk.Duration.minutes(5),
+        statistic: 'Sum',
+      }),
+      threshold: 5,
+      evaluationPeriods: 1,
+      comparisonOperator: cloudwatch.ComparisonOperator.GREATER_THAN_THRESHOLD,
+    });
+
+    // Alarm for DynamoDB throttling
+    const dynamoThrottleAlarm = new cloudwatch.Alarm(this, 'DynamoThrottleAlarm', {
+      alarmName: 'AlswipebyDynamoThrottling',
+      alarmDescription: 'Alert when DynamoDB is throttling requests',
+      metric: new cloudwatch.Metric({
+        namespace: 'AWS/DynamoDB',
+        metricName: 'ThrottledRequests',
+        dimensionsMap: {
+          TableName: businessTable.tableName,
+        },
+        period: cdk.Duration.minutes(5),
+        statistic: 'Sum',
+      }),
+      threshold: 10,
+      evaluationPeriods: 1,
+      comparisonOperator: cloudwatch.ComparisonOperator.GREATER_THAN_THRESHOLD,
+    });
+
+    // ==========================================
     // CloudFront Distribution
     // ==========================================
     const distribution = new cloudfront.Distribution(this, 'WebsiteDistribution', {
@@ -204,6 +341,18 @@ export class AlswipebyStack extends cdk.Stack {
       value: distribution.distributionId,
       description: 'CloudFront distribution ID',
       exportName: 'AlswipebyDistributionId',
+    });
+
+    new cdk.CfnOutput(this, 'BackupBucketName', {
+      value: backupBucket.bucketName,
+      description: 'S3 bucket for automated backups',
+      exportName: 'AlswipebyBackupBucket',
+    });
+
+    new cdk.CfnOutput(this, 'BackupLambdaFunctionName', {
+      value: backupLambda.functionName,
+      description: 'Lambda function that performs daily backups',
+      exportName: 'AlswipebyBackupFunction',
     });
   }
 }
