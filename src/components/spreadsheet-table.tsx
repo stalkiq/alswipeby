@@ -98,6 +98,10 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
           title: 'Success!',
           description: result.message,
         });
+        // Reload the page after 1 second to show updated data
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       } else {
         toast({
           variant: 'destructive',
