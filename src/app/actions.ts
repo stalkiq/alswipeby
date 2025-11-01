@@ -1,6 +1,6 @@
 "use server";
 
-import { saveData } from '@/lib/firebase';
+import { saveData } from '@/lib/aws-dynamodb';
 import type { BusinessData } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
 

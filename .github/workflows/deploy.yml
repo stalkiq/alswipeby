@@ -1,0 +1,125 @@
+name: Deploy to AWS
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  AWS_REGION: us-east-1
+  NODE_VERSION: '20'
+
+jobs:
+  deploy-infrastructure:
+    name: Deploy Infrastructure
+    runs-on: ubuntu-latest
+    outputs:
+      api_url: ${{ steps.cdk-outputs.outputs.api_url }}
+      bucket_name: ${{ steps.cdk-outputs.outputs.bucket_name }}
+      distribution_id: ${{ steps.cdk-outputs.outputs.distribution_id }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: infrastructure/package-lock.json
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Install CDK dependencies
+        working-directory: infrastructure
+        run: npm ci
+
+      - name: Install Lambda dependencies
+        run: |
+          cd infrastructure/lambda/get-business-data && npm install --production
+          cd ../save-business-data && npm install --production
+
+      - name: Deploy CDK Stack
+        working-directory: infrastructure
+        run: npm run deploy
+
+      - name: Get CDK outputs
+        id: cdk-outputs
+        run: |
+          API_URL=$(aws cloudformation describe-stacks --stack-name AlswipebyStack --query 'Stacks[0].Outputs[?OutputKey==`ApiGatewayUrl`].OutputValue' --output text)
+          BUCKET_NAME=$(aws cloudformation describe-stacks --stack-name AlswipebyStack --query 'Stacks[0].Outputs[?OutputKey==`S3BucketName`].OutputValue' --output text)
+          DIST_ID=$(aws cloudformation describe-stacks --stack-name AlswipebyStack --query 'Stacks[0].Outputs[?OutputKey==`CloudFrontDistributionId`].OutputValue' --output text)
+          
+          echo "api_url=$API_URL" >> $GITHUB_OUTPUT
+          echo "bucket_name=$BUCKET_NAME" >> $GITHUB_OUTPUT
+          echo "distribution_id=$DIST_ID" >> $GITHUB_OUTPUT
+          
+          echo "API Gateway URL: $API_URL"
+          echo "S3 Bucket: $BUCKET_NAME"
+          echo "CloudFront Distribution: $DIST_ID"
+
+  deploy-frontend:
+    name: Deploy Frontend
+    runs-on: ubuntu-latest
+    needs: deploy-infrastructure
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Next.js app
+        env:
+          NEXT_PUBLIC_API_GATEWAY_URL: ${{ needs.deploy-infrastructure.outputs.api_url }}
+          API_GATEWAY_URL: ${{ needs.deploy-infrastructure.outputs.api_url }}
+        run: npm run build
+
+      - name: Export static site
+        env:
+          NEXT_PUBLIC_API_GATEWAY_URL: ${{ needs.deploy-infrastructure.outputs.api_url }}
+        run: |
+          # For static export, add this to next.config.ts if needed
+          # For now, we'll use the standard build
+          echo "Using standard Next.js build"
+
+      - name: Sync to S3
+        run: |
+          aws s3 sync .next/static s3://${{ needs.deploy-infrastructure.outputs.bucket_name }}/_next/static --delete
+          aws s3 sync .next/server s3://${{ needs.deploy-infrastructure.outputs.bucket_name }}/_next/server --delete
+          aws s3 sync public s3://${{ needs.deploy-infrastructure.outputs.bucket_name }}/public --delete
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ needs.deploy-infrastructure.outputs.distribution_id }} \
+            --paths "/*"
+
+      - name: Deployment summary
+        run: |
+          echo "✅ Deployment completed successfully!"
+          echo "📦 S3 Bucket: ${{ needs.deploy-infrastructure.outputs.bucket_name }}"
+          echo "🌐 API URL: ${{ needs.deploy-infrastructure.outputs.api_url }}"
+          echo "☁️ CloudFront Distribution: ${{ needs.deploy-infrastructure.outputs.distribution_id }}"
+

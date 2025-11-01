@@ -1,0 +1,152 @@
+
+> alswipeby-infrastructure@1.0.0 deploy
+> cdk deploy --require-approval never
+
+[WARNING] aws-cdk-lib.aws_dynamodb.TableOptions#pointInTimeRecovery is deprecated.
+  use `pointInTimeRecoverySpecification` instead
+  This API will be removed in the next major release.
+[WARNING] aws-cdk-lib.aws_cloudfront_origins.S3Origin is deprecated.
+  Use `S3BucketOrigin` or `S3StaticWebsiteOrigin` instead.
+  This API will be removed in the next major release.
+[WARNING] aws-cdk-lib.aws_cloudfront_origins.S3Origin#bind is deprecated.
+  Use `S3BucketOrigin` or `S3StaticWebsiteOrigin` instead.
+  This API will be removed in the next major release.
+
+✨  Synthesis time: 3.92s
+
+current credentials could not be used to assume 'arn:aws:iam::016442247702:role/cdk-hnb659fds-deploy-role-016442247702-us-east-1', but are for the right account. Proceeding anyway.
+AlswipebyStack: start: Building GetBusinessDataFunction/Code
+AlswipebyStack: success: Built GetBusinessDataFunction/Code
+AlswipebyStack: start: Building SaveBusinessDataFunction/Code
+AlswipebyStack: success: Built SaveBusinessDataFunction/Code
+AlswipebyStack: start: Building AlswipebyStack Template
+AlswipebyStack: success: Built AlswipebyStack Template
+AlswipebyStack: start: Publishing AlswipebyStack Template (016442247702-us-east-1-028cd66f)
+AlswipebyStack: start: Publishing SaveBusinessDataFunction/Code (016442247702-us-east-1-939b263f)
+AlswipebyStack: start: Publishing GetBusinessDataFunction/Code (016442247702-us-east-1-5d0e71fb)
+current credentials could not be used to assume 'arn:aws:iam::016442247702:role/cdk-hnb659fds-file-publishing-role-016442247702-us-east-1', but are for the right account. Proceeding anyway.
+current credentials could not be used to assume 'arn:aws:iam::016442247702:role/cdk-hnb659fds-file-publishing-role-016442247702-us-east-1', but are for the right account. Proceeding anyway.
+current credentials could not be used to assume 'arn:aws:iam::016442247702:role/cdk-hnb659fds-file-publishing-role-016442247702-us-east-1', but are for the right account. Proceeding anyway.
+AlswipebyStack: success: Published AlswipebyStack Template (016442247702-us-east-1-028cd66f)
+AlswipebyStack: success: Published SaveBusinessDataFunction/Code (016442247702-us-east-1-939b263f)
+AlswipebyStack: success: Published GetBusinessDataFunction/Code (016442247702-us-east-1-5d0e71fb)
+AlswipebyStack: deploying... [1/1]
+current credentials could not be used to assume 'arn:aws:iam::016442247702:role/cdk-hnb659fds-deploy-role-016442247702-us-east-1', but are for the right account. Proceeding anyway.
+AlswipebyStack: creating CloudFormation changeset...
+AlswipebyStack |  0/25 | 3:24:32 PM | REVIEW_IN_PROGRESS   | AWS::CloudFormation::Stack                      | AlswipebyStack User Initiated
+AlswipebyStack |  0/25 | 3:24:38 PM | CREATE_IN_PROGRESS   | AWS::CloudFormation::Stack                      | AlswipebyStack User Initiated
+AlswipebyStack |  0/25 | 3:24:41 PM | CREATE_IN_PROGRESS   | AWS::S3::Bucket                                 | WebsiteBucket (WebsiteBucket75C24D94) 
+AlswipebyStack |  0/25 | 3:24:41 PM | CREATE_IN_PROGRESS   | AWS::IAM::Role                                  | LambdaExecutionRole (LambdaExecutionRoleD5C26073) 
+AlswipebyStack |  0/25 | 3:24:41 PM | CREATE_IN_PROGRESS   | AWS::CloudFront::CloudFrontOriginAccessIdentity | OAI (OAIE1EFC67F) 
+AlswipebyStack |  0/25 | 3:24:41 PM | CREATE_IN_PROGRESS   | AWS::DynamoDB::Table                            | BusinessDataTable (BusinessDataTable1FB3548B) 
+AlswipebyStack |  0/25 | 3:24:41 PM | CREATE_IN_PROGRESS   | AWS::ApiGateway::RestApi                        | BusinessDataApi (BusinessDataApi59FC2C72) 
+AlswipebyStack |  0/25 | 3:24:41 PM | CREATE_IN_PROGRESS   | AWS::CDK::Metadata                              | CDKMetadata/Default (CDKMetadata) 
+AlswipebyStack |  0/25 | 3:24:42 PM | CREATE_IN_PROGRESS   | AWS::IAM::Role                                  | LambdaExecutionRole (LambdaExecutionRoleD5C26073) Resource creation Initiated
+AlswipebyStack |  0/25 | 3:24:42 PM | CREATE_IN_PROGRESS   | AWS::CloudFront::CloudFrontOriginAccessIdentity | OAI (OAIE1EFC67F) Resource creation Initiated
+AlswipebyStack |  0/25 | 3:24:42 PM | CREATE_IN_PROGRESS   | AWS::CDK::Metadata                              | CDKMetadata/Default (CDKMetadata) Resource creation Initiated
+AlswipebyStack |  1/25 | 3:24:42 PM | CREATE_COMPLETE      | AWS::CDK::Metadata                              | CDKMetadata/Default (CDKMetadata) 
+AlswipebyStack |  1/25 | 3:24:42 PM | CREATE_IN_PROGRESS   | AWS::S3::Bucket                                 | WebsiteBucket (WebsiteBucket75C24D94) Resource creation Initiated
+AlswipebyStack |  1/25 | 3:24:43 PM | CREATE_IN_PROGRESS   | AWS::DynamoDB::Table                            | BusinessDataTable (BusinessDataTable1FB3548B) Resource creation Initiated
+AlswipebyStack |  1/25 | 3:24:43 PM | CREATE_IN_PROGRESS   | AWS::ApiGateway::RestApi                        | BusinessDataApi (BusinessDataApi59FC2C72) Resource creation Initiated
+AlswipebyStack |  2/25 | 3:24:43 PM | CREATE_COMPLETE      | AWS::CloudFront::CloudFrontOriginAccessIdentity | OAI (OAIE1EFC67F) 
+AlswipebyStack |  3/25 | 3:24:43 PM | CREATE_COMPLETE      | AWS::ApiGateway::RestApi                        | BusinessDataApi (BusinessDataApi59FC2C72) 
+AlswipebyStack |  3/25 | 3:24:44 PM | CREATE_IN_PROGRESS   | AWS::ApiGateway::Method                         | BusinessDataApi/Default/OPTIONS (BusinessDataApiOPTIONS9C5DACBD) 
+AlswipebyStack |  3/25 | 3:24:44 PM | CREATE_IN_PROGRESS   | AWS::ApiGateway::Resource                       | BusinessDataApi/Default/businesses (BusinessDataApibusinessesC417DB94) 
+AlswipebyStack |  3/25 | 3:24:45 PM | CREATE_IN_PROGRESS   | AWS::ApiGateway::Method                         | BusinessDataApi/Default/OPTIONS (BusinessDataApiOPTIONS9C5DACBD) Resource creation Initiated
+AlswipebyStack |  3/25 | 3:24:45 PM | CREATE_IN_PROGRESS   | AWS::ApiGateway::Resource                       | BusinessDataApi/Default/businesses (BusinessDataApibusinessesC417DB94) Resource creation Initiated
+AlswipebyStack |  4/25 | 3:24:46 PM | CREATE_COMPLETE      | AWS::ApiGateway::Resource                       | BusinessDataApi/Default/businesses (BusinessDataApibusinessesC417DB94) 
+AlswipebyStack |  4/25 | 3:24:47 PM | CREATE_IN_PROGRESS   | AWS::ApiGateway::Resource                       | BusinessDataApi/Default/businesses/save (BusinessDataApibusinessessave332D2D86) 
+AlswipebyStack |  4/25 | 3:24:47 PM | CREATE_IN_PROGRESS   | AWS::ApiGateway::Method                         | BusinessDataApi/Default/businesses/OPTIONS (BusinessDataApibusinessesOPTIONSEE735ACA) 
+AlswipebyStack |  5/25 | 3:24:47 PM | CREATE_COMPLETE      | AWS::ApiGateway::Method                         | BusinessDataApi/Default/OPTIONS (BusinessDataApiOPTIONS9C5DACBD) 
+AlswipebyStack |  5/25 | 3:24:47 PM | CREATE_IN_PROGRESS   | AWS::ApiGateway::Resource                       | BusinessDataApi/Default/businesses/save (BusinessDataApibusinessessave332D2D86) Resource creation Initiated
+AlswipebyStack |  5/25 | 3:24:48 PM | CREATE_IN_PROGRESS   | AWS::ApiGateway::Method                         | BusinessDataApi/Default/businesses/OPTIONS (BusinessDataApibusinessesOPTIONSEE735ACA) Resource creation Initiated
+AlswipebyStack |  6/25 | 3:24:48 PM | CREATE_COMPLETE      | AWS::ApiGateway::Resource                       | BusinessDataApi/Default/businesses/save (BusinessDataApibusinessessave332D2D86) 
+AlswipebyStack |  6/25 | 3:24:49 PM | CREATE_IN_PROGRESS   | AWS::ApiGateway::Method                         | BusinessDataApi/Default/businesses/save/OPTIONS (BusinessDataApibusinessessaveOPTIONS5B811D81) 
+AlswipebyStack |  6/25 | 3:24:50 PM | CREATE_IN_PROGRESS   | AWS::ApiGateway::Method                         | BusinessDataApi/Default/businesses/save/OPTIONS (BusinessDataApibusinessessaveOPTIONS5B811D81) Resource creation Initiated
+AlswipebyStack |  7/25 | 3:24:50 PM | CREATE_COMPLETE      | AWS::ApiGateway::Method                         | BusinessDataApi/Default/businesses/OPTIONS (BusinessDataApibusinessesOPTIONSEE735ACA) 
+AlswipebyStack |  8/25 | 3:24:52 PM | CREATE_COMPLETE      | AWS::ApiGateway::Method                         | BusinessDataApi/Default/businesses/save/OPTIONS (BusinessDataApibusinessessaveOPTIONS5B811D81) 
+AlswipebyStack |  9/25 | 3:24:56 PM | CREATE_COMPLETE      | AWS::S3::Bucket                                 | WebsiteBucket (WebsiteBucket75C24D94) 
+AlswipebyStack |  9/25 | 3:24:57 PM | CREATE_IN_PROGRESS   | AWS::CloudFront::Distribution                   | WebsiteDistribution (WebsiteDistribution75DCDA0B) 
+AlswipebyStack |  9/25 | 3:24:58 PM | CREATE_IN_PROGRESS   | AWS::S3::BucketPolicy                           | WebsiteBucket/Policy (WebsiteBucketPolicyE10E3262) 
+AlswipebyStack |  9/25 | 3:24:59 PM | CREATE_IN_PROGRESS   | AWS::S3::BucketPolicy                           | WebsiteBucket/Policy (WebsiteBucketPolicyE10E3262) Resource creation Initiated
+AlswipebyStack | 10/25 | 3:24:59 PM | CREATE_COMPLETE      | AWS::IAM::Role                                  | LambdaExecutionRole (LambdaExecutionRoleD5C26073) 
+AlswipebyStack | 10/25 | 3:24:59 PM | CREATE_IN_PROGRESS   | AWS::CloudFront::Distribution                   | WebsiteDistribution (WebsiteDistribution75DCDA0B) Resource creation Initiated
+AlswipebyStack | 11/25 | 3:24:59 PM | CREATE_COMPLETE      | AWS::S3::BucketPolicy                           | WebsiteBucket/Policy (WebsiteBucketPolicyE10E3262) 
+AlswipebyStack | 11/25 | 3:25:00 PM | CREATE_IN_PROGRESS   | AWS::CloudFront::Distribution                   | WebsiteDistribution (WebsiteDistribution75DCDA0B) Eventual consistency check initiated
+AlswipebyStack | 12/25 | 3:25:17 PM | CREATE_COMPLETE      | AWS::DynamoDB::Table                            | BusinessDataTable (BusinessDataTable1FB3548B) 
+AlswipebyStack | 12/25 | 3:25:18 PM | CREATE_IN_PROGRESS   | AWS::IAM::Policy                                | LambdaExecutionRole/DefaultPolicy (LambdaExecutionRoleDefaultPolicy6D69732F) 
+AlswipebyStack | 12/25 | 3:25:19 PM | CREATE_IN_PROGRESS   | AWS::IAM::Policy                                | LambdaExecutionRole/DefaultPolicy (LambdaExecutionRoleDefaultPolicy6D69732F) Resource creation Initiated
+AlswipebyStack | 13/25 | 3:25:34 PM | CREATE_COMPLETE      | AWS::IAM::Policy                                | LambdaExecutionRole/DefaultPolicy (LambdaExecutionRoleDefaultPolicy6D69732F) 
+AlswipebyStack | 13/25 | 3:25:35 PM | CREATE_IN_PROGRESS   | AWS::Lambda::Function                           | GetBusinessDataFunction (GetBusinessDataFunctionBC5B5D9B) 
+AlswipebyStack | 13/25 | 3:25:35 PM | CREATE_IN_PROGRESS   | AWS::Lambda::Function                           | SaveBusinessDataFunction (SaveBusinessDataFunctionC82BBB4F) 
+AlswipebyStack | 13/25 | 3:25:36 PM | CREATE_IN_PROGRESS   | AWS::Lambda::Function                           | GetBusinessDataFunction (GetBusinessDataFunctionBC5B5D9B) Resource creation Initiated
+AlswipebyStack | 13/25 | 3:25:37 PM | CREATE_IN_PROGRESS   | AWS::Lambda::Function                           | SaveBusinessDataFunction (SaveBusinessDataFunctionC82BBB4F) Resource creation Initiated
+AlswipebyStack | 14/25 | 3:25:45 PM | CREATE_COMPLETE      | AWS::Lambda::Function                           | GetBusinessDataFunction (GetBusinessDataFunctionBC5B5D9B) 
+AlswipebyStack | 15/25 | 3:25:45 PM | CREATE_COMPLETE      | AWS::Lambda::Function                           | SaveBusinessDataFunction (SaveBusinessDataFunctionC82BBB4F) 
+AlswipebyStack | 15/25 | 3:25:45 PM | CREATE_IN_PROGRESS   | AWS::Lambda::Permission                         | BusinessDataApi/Default/businesses/GET/ApiPermission.Test.AlswipebyStackBusinessDataApi058C3FC5.GET..businesses (BusinessDataApibusinessesGETApiPermissionTestAlswipebyStackBusinessDataApi058C3FC5GETbusinesses9F58F90D) 
+AlswipebyStack | 15/25 | 3:25:45 PM | CREATE_IN_PROGRESS   | AWS::ApiGateway::Method                         | BusinessDataApi/Default/businesses/GET (BusinessDataApibusinessesGET6950B0F0) 
+AlswipebyStack | 15/25 | 3:25:46 PM | CREATE_IN_PROGRESS   | AWS::ApiGateway::Method                         | BusinessDataApi/Default/businesses/save/POST (BusinessDataApibusinessessavePOST435B1E8B) 
+AlswipebyStack | 15/25 | 3:25:46 PM | CREATE_IN_PROGRESS   | AWS::Lambda::Permission                         | BusinessDataApi/Default/businesses/save/POST/ApiPermission.Test.AlswipebyStackBusinessDataApi058C3FC5.POST..businesses.save (BusinessDataApibusinessessavePOSTApiPermissionTestAlswipebyStackBusinessDataApi058C3FC5POSTbusinessessave535CD070) 
+AlswipebyStack | 15/25 | 3:25:46 PM | CREATE_IN_PROGRESS   | AWS::ApiGateway::Method                         | BusinessDataApi/Default/businesses/GET (BusinessDataApibusinessesGET6950B0F0) Resource creation Initiated
+AlswipebyStack | 15/25 | 3:25:46 PM | CREATE_IN_PROGRESS   | AWS::Lambda::Permission                         | BusinessDataApi/Default/businesses/GET/ApiPermission.Test.AlswipebyStackBusinessDataApi058C3FC5.GET..businesses (BusinessDataApibusinessesGETApiPermissionTestAlswipebyStackBusinessDataApi058C3FC5GETbusinesses9F58F90D) Resource creation Initiated
+AlswipebyStack | 15/25 | 3:25:46 PM | CREATE_IN_PROGRESS   | AWS::ApiGateway::Method                         | BusinessDataApi/Default/businesses/save/POST (BusinessDataApibusinessessavePOST435B1E8B) Resource creation Initiated
+AlswipebyStack | 15/25 | 3:25:46 PM | CREATE_IN_PROGRESS   | AWS::Lambda::Permission                         | BusinessDataApi/Default/businesses/save/POST/ApiPermission.Test.AlswipebyStackBusinessDataApi058C3FC5.POST..businesses.save (BusinessDataApibusinessessavePOSTApiPermissionTestAlswipebyStackBusinessDataApi058C3FC5POSTbusinessessave535CD070) Resource creation Initiated
+AlswipebyStack | 16/25 | 3:25:47 PM | CREATE_COMPLETE      | AWS::Lambda::Permission                         | BusinessDataApi/Default/businesses/GET/ApiPermission.Test.AlswipebyStackBusinessDataApi058C3FC5.GET..businesses (BusinessDataApibusinessesGETApiPermissionTestAlswipebyStackBusinessDataApi058C3FC5GETbusinesses9F58F90D) 
+AlswipebyStack | 17/25 | 3:25:47 PM | CREATE_COMPLETE      | AWS::Lambda::Permission                         | BusinessDataApi/Default/businesses/save/POST/ApiPermission.Test.AlswipebyStackBusinessDataApi058C3FC5.POST..businesses.save (BusinessDataApibusinessessavePOSTApiPermissionTestAlswipebyStackBusinessDataApi058C3FC5POSTbusinessessave535CD070) 
+AlswipebyStack | 18/25 | 3:25:48 PM | CREATE_COMPLETE      | AWS::ApiGateway::Method                         | BusinessDataApi/Default/businesses/GET (BusinessDataApibusinessesGET6950B0F0) 
+AlswipebyStack | 19/25 | 3:25:48 PM | CREATE_COMPLETE      | AWS::ApiGateway::Method                         | BusinessDataApi/Default/businesses/save/POST (BusinessDataApibusinessessavePOST435B1E8B) 
+AlswipebyStack | 19/25 | 3:25:49 PM | CREATE_IN_PROGRESS   | AWS::ApiGateway::Deployment                     | BusinessDataApi/Deployment (BusinessDataApiDeploymentD6F634F989874f7a0e5b3dc1ad4c0c79c3bdeb9e) 
+AlswipebyStack | 19/25 | 3:25:50 PM | CREATE_IN_PROGRESS   | AWS::ApiGateway::Deployment                     | BusinessDataApi/Deployment (BusinessDataApiDeploymentD6F634F989874f7a0e5b3dc1ad4c0c79c3bdeb9e) Resource creation Initiated
+AlswipebyStack | 20/25 | 3:25:51 PM | CREATE_COMPLETE      | AWS::ApiGateway::Deployment                     | BusinessDataApi/Deployment (BusinessDataApiDeploymentD6F634F989874f7a0e5b3dc1ad4c0c79c3bdeb9e) 
+AlswipebyStack | 20/25 | 3:25:51 PM | CREATE_IN_PROGRESS   | AWS::ApiGateway::Stage                          | BusinessDataApi/DeploymentStage.prod (BusinessDataApiDeploymentStageprod7E5D070C) 
+AlswipebyStack | 20/25 | 3:25:52 PM | CREATE_IN_PROGRESS   | AWS::ApiGateway::Stage                          | BusinessDataApi/DeploymentStage.prod (BusinessDataApiDeploymentStageprod7E5D070C) Resource creation Initiated
+AlswipebyStack | 20/25 | 3:25:54 PM | CREATE_FAILED        | AWS::ApiGateway::Stage                          | BusinessDataApi/DeploymentStage.prod (BusinessDataApiDeploymentStageprod7E5D070C) Resource handler returned message: "CloudWatch Logs role ARN must be set in account settings to enable logging (Service: ApiGateway, Status Code: 400, Request ID: f4d39c39-c894-4d4f-9925-9b2d542c11fe) (SDK Attempt Count: 1)" (RequestToken: 30b7b29b-7772-de15-0572-0433557b9f63, HandlerErrorCode: InvalidRequest)
+AlswipebyStack | 20/25 | 3:25:54 PM | CREATE_FAILED        | AWS::CloudFront::Distribution                   | WebsiteDistribution (WebsiteDistribution75DCDA0B) Resource creation cancelled
+AlswipebyStack | 20/25 | 3:25:54 PM | ROLLBACK_IN_PROGRESS | AWS::CloudFormation::Stack                      | AlswipebyStack The following resource(s) failed to create: [BusinessDataApiDeploymentStageprod7E5D070C, WebsiteDistribution75DCDA0B]. Rollback requested by user.
+AlswipebyStack | 20/25 | 3:25:57 PM | DELETE_IN_PROGRESS   | AWS::Lambda::Permission                         | BusinessDataApi/Default/businesses/GET/ApiPermission.Test.AlswipebyStackBusinessDataApi058C3FC5.GET..businesses (BusinessDataApibusinessesGETApiPermissionTestAlswipebyStackBusinessDataApi058C3FC5GETbusinesses9F58F90D) 
+AlswipebyStack | 20/25 | 3:25:57 PM | DELETE_IN_PROGRESS   | AWS::Lambda::Permission                         | BusinessDataApi/Default/businesses/save/POST/ApiPermission.Test.AlswipebyStackBusinessDataApi058C3FC5.POST..businesses.save (BusinessDataApibusinessessavePOSTApiPermissionTestAlswipebyStackBusinessDataApi058C3FC5POSTbusinessessave535CD070) 
+AlswipebyStack | 20/25 | 3:25:57 PM | DELETE_IN_PROGRESS   | AWS::S3::BucketPolicy                           | WebsiteBucket/Policy (WebsiteBucketPolicyE10E3262) 
+AlswipebyStack | 20/25 | 3:25:57 PM | DELETE_IN_PROGRESS   | AWS::CloudFront::Distribution                   | WebsiteDistribution (WebsiteDistribution75DCDA0B) 
+AlswipebyStack | 20/25 | 3:25:57 PM | DELETE_IN_PROGRESS   | AWS::ApiGateway::Stage                          | BusinessDataApi/DeploymentStage.prod (BusinessDataApiDeploymentStageprod7E5D070C) 
+AlswipebyStack | 20/25 | 3:25:57 PM | DELETE_IN_PROGRESS   | AWS::CDK::Metadata                              | CDKMetadata/Default (CDKMetadata) 
+AlswipebyStack | 19/25 | 3:25:57 PM | DELETE_COMPLETE      | AWS::Lambda::Permission                         | BusinessDataApi/Default/businesses/GET/ApiPermission.Test.AlswipebyStackBusinessDataApi058C3FC5.GET..businesses (BusinessDataApibusinessesGETApiPermissionTestAlswipebyStackBusinessDataApi058C3FC5GETbusinesses9F58F90D) 
+AlswipebyStack | 18/25 | 3:25:57 PM | DELETE_COMPLETE      | AWS::Lambda::Permission                         | BusinessDataApi/Default/businesses/save/POST/ApiPermission.Test.AlswipebyStackBusinessDataApi058C3FC5.POST..businesses.save (BusinessDataApibusinessessavePOSTApiPermissionTestAlswipebyStackBusinessDataApi058C3FC5POSTbusinessessave535CD070) 
+AlswipebyStack | 17/25 | 3:25:58 PM | DELETE_COMPLETE      | AWS::S3::BucketPolicy                           | WebsiteBucket/Policy (WebsiteBucketPolicyE10E3262) 
+AlswipebyStack | 16/25 | 3:25:58 PM | DELETE_COMPLETE      | AWS::CDK::Metadata                              | CDKMetadata/Default (CDKMetadata) 
+AlswipebyStack | 17/25 | 3:26:01 PM | DELETE_COMPLETE      | AWS::ApiGateway::Stage                          | BusinessDataApi/DeploymentStage.prod (BusinessDataApiDeploymentStageprod7E5D070C) 
+AlswipebyStack | 17/25 | 3:26:02 PM | DELETE_IN_PROGRESS   | AWS::ApiGateway::Deployment                     | BusinessDataApi/Deployment (BusinessDataApiDeploymentD6F634F989874f7a0e5b3dc1ad4c0c79c3bdeb9e) 
+AlswipebyStack | 16/25 | 3:26:03 PM | DELETE_COMPLETE      | AWS::ApiGateway::Deployment                     | BusinessDataApi/Deployment (BusinessDataApiDeploymentD6F634F989874f7a0e5b3dc1ad4c0c79c3bdeb9e) 
+AlswipebyStack | 16/25 | 3:26:03 PM | DELETE_IN_PROGRESS   | AWS::ApiGateway::Method                         | BusinessDataApi/Default/businesses/save/POST (BusinessDataApibusinessessavePOST435B1E8B) 
+AlswipebyStack | 16/25 | 3:26:03 PM | DELETE_IN_PROGRESS   | AWS::ApiGateway::Method                         | BusinessDataApi/Default/businesses/save/OPTIONS (BusinessDataApibusinessessaveOPTIONS5B811D81) 
+AlswipebyStack | 16/25 | 3:26:03 PM | DELETE_IN_PROGRESS   | AWS::ApiGateway::Method                         | BusinessDataApi/Default/businesses/OPTIONS (BusinessDataApibusinessesOPTIONSEE735ACA) 
+AlswipebyStack | 16/25 | 3:26:03 PM | DELETE_IN_PROGRESS   | AWS::ApiGateway::Method                         | BusinessDataApi/Default/OPTIONS (BusinessDataApiOPTIONS9C5DACBD) 
+AlswipebyStack | 16/25 | 3:26:03 PM | DELETE_IN_PROGRESS   | AWS::ApiGateway::Method                         | BusinessDataApi/Default/businesses/GET (BusinessDataApibusinessesGET6950B0F0) 
+AlswipebyStack | 15/25 | 3:26:04 PM | DELETE_COMPLETE      | AWS::ApiGateway::Method                         | BusinessDataApi/Default/businesses/save/OPTIONS (BusinessDataApibusinessessaveOPTIONS5B811D81) 
+AlswipebyStack | 14/25 | 3:26:04 PM | DELETE_COMPLETE      | AWS::ApiGateway::Method                         | BusinessDataApi/Default/businesses/OPTIONS (BusinessDataApibusinessesOPTIONSEE735ACA) 
+AlswipebyStack | 13/25 | 3:26:04 PM | DELETE_COMPLETE      | AWS::ApiGateway::Method                         | BusinessDataApi/Default/OPTIONS (BusinessDataApiOPTIONS9C5DACBD) 
+AlswipebyStack | 12/25 | 3:26:04 PM | DELETE_COMPLETE      | AWS::ApiGateway::Method                         | BusinessDataApi/Default/businesses/save/POST (BusinessDataApibusinessessavePOST435B1E8B) 
+AlswipebyStack | 11/25 | 3:26:04 PM | DELETE_COMPLETE      | AWS::ApiGateway::Method                         | BusinessDataApi/Default/businesses/GET (BusinessDataApibusinessesGET6950B0F0) 
+AlswipebyStack | 11/25 | 3:26:04 PM | DELETE_IN_PROGRESS   | AWS::ApiGateway::Resource                       | BusinessDataApi/Default/businesses/save (BusinessDataApibusinessessave332D2D86) 
+AlswipebyStack | 11/25 | 3:26:04 PM | DELETE_IN_PROGRESS   | AWS::Lambda::Function                           | SaveBusinessDataFunction (SaveBusinessDataFunctionC82BBB4F) 
+AlswipebyStack | 11/25 | 3:26:04 PM | DELETE_IN_PROGRESS   | AWS::Lambda::Function                           | GetBusinessDataFunction (GetBusinessDataFunctionBC5B5D9B) 
+AlswipebyStack | 10/25 | 3:26:05 PM | DELETE_COMPLETE      | AWS::ApiGateway::Resource                       | BusinessDataApi/Default/businesses/save (BusinessDataApibusinessessave332D2D86) 
+AlswipebyStack | 10/25 | 3:26:06 PM | DELETE_IN_PROGRESS   | AWS::ApiGateway::Resource                       | BusinessDataApi/Default/businesses (BusinessDataApibusinessesC417DB94) 
+AlswipebyStack |  9/25 | 3:26:07 PM | DELETE_COMPLETE      | AWS::ApiGateway::Resource                       | BusinessDataApi/Default/businesses (BusinessDataApibusinessesC417DB94) 
+AlswipebyStack |  9/25 | 3:26:07 PM | DELETE_IN_PROGRESS   | AWS::ApiGateway::RestApi                        | BusinessDataApi (BusinessDataApi59FC2C72) 
+AlswipebyStack |  8/25 | 3:26:08 PM | DELETE_COMPLETE      | AWS::Lambda::Function                           | GetBusinessDataFunction (GetBusinessDataFunctionBC5B5D9B) 
+AlswipebyStack |  7/25 | 3:26:08 PM | DELETE_COMPLETE      | AWS::Lambda::Function                           | SaveBusinessDataFunction (SaveBusinessDataFunctionC82BBB4F) 
+AlswipebyStack |  6/25 | 3:26:08 PM | DELETE_COMPLETE      | AWS::ApiGateway::RestApi                        | BusinessDataApi (BusinessDataApi59FC2C72) 
+AlswipebyStack |  6/25 | 3:26:09 PM | DELETE_IN_PROGRESS   | AWS::IAM::Policy                                | LambdaExecutionRole/DefaultPolicy (LambdaExecutionRoleDefaultPolicy6D69732F) 
+AlswipebyStack |  5/25 | 3:26:09 PM | DELETE_COMPLETE      | AWS::IAM::Policy                                | LambdaExecutionRole/DefaultPolicy (LambdaExecutionRoleDefaultPolicy6D69732F) 
+AlswipebyStack |  5/25 | 3:26:10 PM | DELETE_IN_PROGRESS   | AWS::IAM::Role                                  | LambdaExecutionRole (LambdaExecutionRoleD5C26073) 
+AlswipebyStack |  5/25 | 3:26:10 PM | DELETE_SKIPPED       | AWS::DynamoDB::Table                            | BusinessDataTable (BusinessDataTable1FB3548B) 
+AlswipebyStack |  4/25 | 3:26:20 PM | DELETE_COMPLETE      | AWS::IAM::Role                                  | LambdaExecutionRole (LambdaExecutionRoleD5C26073) 
+AlswipebyStack |  5/25 | 3:30:10 PM | DELETE_COMPLETE      | AWS::CloudFront::Distribution                   | WebsiteDistribution (WebsiteDistribution75DCDA0B) 
+AlswipebyStack |  5/25 | 3:30:11 PM | DELETE_IN_PROGRESS   | AWS::CloudFront::CloudFrontOriginAccessIdentity | OAI (OAIE1EFC67F) 
+AlswipebyStack |  5/25 | 3:30:11 PM | DELETE_SKIPPED       | AWS::S3::Bucket                                 | WebsiteBucket (WebsiteBucket75C24D94) 
+AlswipebyStack |  4/25 | 3:30:12 PM | DELETE_COMPLETE      | AWS::CloudFront::CloudFrontOriginAccessIdentity | OAI (OAIE1EFC67F) 
+AlswipebyStack |  5/25 | 3:30:12 PM | ROLLBACK_COMPLETE    | AWS::CloudFormation::Stack                      | AlswipebyStack 
+
+Failed resources:
+AlswipebyStack | 3:25:54 PM | CREATE_FAILED        | AWS::ApiGateway::Stage                          | BusinessDataApi/DeploymentStage.prod (BusinessDataApiDeploymentStageprod7E5D070C) Resource handler returned message: "CloudWatch Logs role ARN must be set in account settings to enable logging (Service: ApiGateway, Status Code: 400, Request ID: f4d39c39-c894-4d4f-9925-9b2d542c11fe) (SDK Attempt Count: 1)" (RequestToken: 30b7b29b-7772-de15-0572-0433557b9f63, HandlerErrorCode: InvalidRequest)
+❌  AlswipebyStack failed: ToolkitError: The stack named AlswipebyStack failed creation, it may need to be manually deleted from the AWS console: ROLLBACK_COMPLETE: Resource handler returned message: "CloudWatch Logs role ARN must be set in account settings to enable logging (Service: ApiGateway, Status Code: 400, Request ID: f4d39c39-c894-4d4f-9925-9b2d542c11fe) (SDK Attempt Count: 1)" (RequestToken: 30b7b29b-7772-de15-0572-0433557b9f63, HandlerErrorCode: InvalidRequest)

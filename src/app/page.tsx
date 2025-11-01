@@ -1,5 +1,5 @@
 import SpreadsheetTable from '@/components/spreadsheet-table';
-import { getData } from '@/lib/firebase';
+import { getData } from '@/lib/aws-dynamodb';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default async function Home() {

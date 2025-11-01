@@ -1,0 +1,11 @@
+{
+  "name": "get-business-data",
+  "version": "1.0.0",
+  "description": "Lambda function to get business data from DynamoDB",
+  "main": "index.js",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.600.0",
+    "@aws-sdk/lib-dynamodb": "^3.600.0"
+  }
+}
+
