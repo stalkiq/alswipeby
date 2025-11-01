@@ -6,6 +6,7 @@ import { saveSpreadsheetData } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Table,
   TableBody,
@@ -14,10 +15,20 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose,
+} from "@/components/ui/dialog"
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PlusCircle, Trash2, Save, Loader2 } from 'lucide-react';
+import { PlusCircle, Trash2, Save, Loader2, FileText } from 'lucide-react';
 
-const columns: { id: keyof Omit<BusinessData, 'docId'>; label: string }[] = [
+const columns: { id: keyof Omit<BusinessData, 'docId' | 'notes'>; label: string }[] = [
     { id: 'businessName', label: 'Business Name' },
     { id: 'street', label: 'Street' },
     { id: 'city', label: 'City' },
@@ -36,11 +47,21 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
   const [data, setData] = useState<BusinessData[]>(initialData);
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
+  const [editingNote, setEditingNote] = useState<{ rowIndex: number; notes: string } | null>(null);
 
-  const handleInputChange = (rowIndex: number, columnId: keyof BusinessData, value: string) => {
+  const handleInputChange = (rowIndex: number, columnId: keyof Omit<BusinessData, 'docId' | 'notes'>, value: string) => {
     const newData = [...data];
     newData[rowIndex] = { ...newData[rowIndex], [columnId]: value };
     setData(newData);
+  };
+  
+  const handleSaveNote = () => {
+    if (editingNote) {
+      const newData = [...data];
+      newData[editingNote.rowIndex].notes = editingNote.notes;
+      setData(newData);
+      setEditingNote(null);
+    }
   };
 
   const addRow = () => {
@@ -58,6 +79,7 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
       instagramPresent: '',
       website: '',
       onlineOn: '',
+      notes: '',
     };
     setData([...data, newRow]);
   };
@@ -111,6 +133,7 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
           <Table className="min-w-max">
             <TableHeader>
               <TableRow>
+                <TableHead className="sticky left-0 bg-card z-10">Notes</TableHead>
                 {columns.map((col) => (
                   <TableHead key={col.id} className="whitespace-nowrap">{col.label}</TableHead>
                 ))}
@@ -120,6 +143,46 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
             <TableBody>
               {data.map((row, rowIndex) => (
                 <TableRow key={row.docId || rowIndex}>
+                  <TableCell className="sticky left-0 bg-card z-10">
+                     <Dialog onOpenChange={(open) => !open && setEditingNote(null)}>
+                      <DialogTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => setEditingNote({ rowIndex, notes: row.notes || '' })}
+                        >
+                          <FileText className="h-4 w-4" />
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="sm:max-w-[425px]">
+                        <DialogHeader>
+                          <DialogTitle>Edit Notes</DialogTitle>
+                          <DialogDescription>
+                            Add or edit notes for {row.businessName || 'this business'}. Click save when you're done.
+                          </DialogDescription>
+                        </DialogHeader>
+                        <div className="grid gap-4 py-4">
+                          <Textarea
+                            id="notes"
+                            value={editingNote?.notes}
+                            onChange={(e) =>
+                              editingNote && setEditingNote({ ...editingNote, notes: e.target.value })
+                            }
+                            className="col-span-3 min-h-[150px]"
+                             placeholder="Type your notes here."
+                          />
+                        </div>
+                        <DialogFooter>
+                           <DialogClose asChild>
+                            <Button type="button" variant="secondary">
+                              Cancel
+                            </Button>
+                          </DialogClose>
+                          <Button type="submit" onClick={handleSaveNote}>Save changes</Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+                  </TableCell>
                   {columns.map((col) => (
                     <TableCell key={col.id}>
                       <Input

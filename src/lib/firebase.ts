@@ -17,6 +17,7 @@ let mockDatabase: BusinessData[] = [
     instagramPresent: 'Yes',
     website: 'https://coffeeshop.com',
     onlineOn: '2024-05-21',
+    notes: 'A popular spot for locals. Great espresso.',
   },
   {
     docId: '2',
@@ -32,6 +33,7 @@ let mockDatabase: BusinessData[] = [
     instagramPresent: 'Yes',
     website: 'https://bookwormreads.com',
     onlineOn: '2024-05-22',
+    notes: 'Cozy atmosphere. Has a rare books section in the back.',
   },
 ];
 

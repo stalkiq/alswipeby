@@ -12,4 +12,5 @@ export type BusinessData = {
   instagramPresent: string;
   website: string;
   onlineOn: string;
+  notes: string;
 };
