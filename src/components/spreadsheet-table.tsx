@@ -138,7 +138,7 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
                 {columns.map((col) => (
                   <TableHead key={col.id} className="whitespace-nowrap">{col.label}</TableHead>
                 ))}
-                <TableHead className="sticky right-0 bg-card">Actions</TableHead>
+                {/* <TableHead className="sticky right-0 bg-card">Actions</TableHead> */}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -204,7 +204,7 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
                       />
                     </TableCell>
                   ))}
-                  <TableCell className="sticky right-0 bg-card">
+                  {/* <TableCell className="sticky right-0 bg-card">
                     <Button
                       variant="ghost"
                       size="icon"
@@ -213,7 +213,7 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
                     >
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
-                  </TableCell>
+                  </TableCell> */}
                 </TableRow>
               ))}
             </TableBody>
