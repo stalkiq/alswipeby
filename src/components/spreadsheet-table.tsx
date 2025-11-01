@@ -26,7 +26,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog"
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PlusCircle, Trash2, Save, Loader2, FileText } from 'lucide-react';
+import { PlusCircle, Trash2, Save, Loader2, FileText, Clock } from 'lucide-react';
 
 const columns: { id: keyof Omit<BusinessData, 'docId' | 'notes'>; label: string }[] = [
     { id: 'businessName', label: 'Business Name' },
@@ -52,7 +52,25 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
   const handleSaveNote = () => {
     if (editingNote) {
       const newData = [...data];
+      const timestamp = new Date().toLocaleString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+      });
+      
+      // Add to note history
+      const noteHistoryEntry = {
+        note: editingNote.notes,
+        timestamp: timestamp,
+      };
+      
+      const existingHistory = newData[editingNote.rowIndex].noteHistory || [];
       newData[editingNote.rowIndex].notes = editingNote.notes;
+      newData[editingNote.rowIndex].noteHistory = [...existingHistory, noteHistoryEntry];
+      
       setData(newData);
       setEditingNote(null);
     }
@@ -68,6 +86,7 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
       instagramUrl: '',
       instagramPresent: '',
       notes: '',
+      noteHistory: [],
     };
     setData([...data, newRow]);
   };
@@ -170,15 +189,48 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
                           </DialogDescription>
                         </DialogHeader>
                         <div className="grid gap-4 py-4">
-                          <Textarea
-                            id="notes"
-                            value={editingNote?.notes || ''}
-                            onChange={(e) =>
-                              editingNote && setEditingNote({ ...editingNote, notes: e.target.value })
-                            }
-                            className="col-span-3 min-h-[150px]"
-                             placeholder="Type your notes here."
-                          />
+                          <div className="space-y-2">
+                            <label htmlFor="notes" className="text-sm font-medium">
+                              Notes
+                            </label>
+                            <Textarea
+                              id="notes"
+                              value={editingNote?.notes || ''}
+                              onChange={(e) =>
+                                editingNote && setEditingNote({ ...editingNote, notes: e.target.value })
+                              }
+                              className="col-span-3 min-h-[150px]"
+                              placeholder="Type your notes here."
+                            />
+                          </div>
+                          
+                          {/* Note History */}
+                          {row.noteHistory && row.noteHistory.length > 0 && (
+                            <div className="space-y-2 border-t pt-4">
+                              <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
+                                <Clock className="h-4 w-4" />
+                                <span>Note History</span>
+                              </div>
+                              <div className="space-y-3 max-h-[200px] overflow-y-auto">
+                                {[...row.noteHistory].reverse().map((entry, idx) => (
+                                  <div
+                                    key={idx}
+                                    className="rounded-lg border bg-muted/50 p-3 space-y-1"
+                                  >
+                                    <div className="flex items-center justify-between">
+                                      <span className="text-xs text-muted-foreground flex items-center gap-1">
+                                        <Clock className="h-3 w-3" />
+                                        {entry.timestamp}
+                                      </span>
+                                    </div>
+                                    <p className="text-sm text-foreground whitespace-pre-wrap break-words">
+                                      {entry.note}
+                                    </p>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
                         </div>
                         <DialogFooter>
                            <DialogClose asChild>

@@ -1,3 +1,8 @@
+export type NoteHistoryEntry = {
+  note: string;
+  timestamp: string;
+};
+
 export type BusinessData = {
   docId: string;
   businessName: string;
@@ -7,4 +12,5 @@ export type BusinessData = {
   instagramUrl: string;
   instagramPresent: string;
   notes: string;
+  noteHistory?: NoteHistoryEntry[];
 };
