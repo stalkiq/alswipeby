@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from 'react';
+import { useState } from 'react';
 import type { BusinessData } from '@/lib/types';
 import { saveSpreadsheetData } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
@@ -45,7 +45,7 @@ const columns: { id: keyof Omit<BusinessData, 'docId' | 'notes'>; label: string 
 
 export default function SpreadsheetTable({ initialData }: { initialData: BusinessData[] }) {
   const [data, setData] = useState<BusinessData[]>(initialData);
-  const [isPending, startTransition] = useTransition();
+  const [isPending, setIsPending] = useState(false);
   const { toast } = useToast();
   const [editingNote, setEditingNote] = useState<{ rowIndex: number; notes: string } | null>(null);
 
@@ -89,8 +89,9 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
     setData(newData);
   };
 
-  const handleSave = () => {
-    startTransition(async () => {
+  const handleSave = async () => {
+    setIsPending(true);
+    try {
       const result = await saveSpreadsheetData(data);
       if (result.success) {
         toast({
@@ -104,7 +105,15 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
           description: result.error,
         });
       }
-    });
+    } catch (error) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Failed to save data',
+      });
+    } finally {
+      setIsPending(false);
+    }
   };
 
   return (

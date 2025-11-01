@@ -1,9 +1,39 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import SpreadsheetTable from '@/components/spreadsheet-table';
 import { getData } from '@/lib/aws-dynamodb';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import type { BusinessData } from '@/lib/types';
 
-export default async function Home() {
-  const initialData = await getData();
+export default function Home() {
+  const [initialData, setInitialData] = useState<BusinessData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const data = await getData();
+        setInitialData(data);
+      } catch (error) {
+        console.error('Error fetching initial data:', error);
+        setInitialData([]);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen w-full flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading your data...</p>
+        </div>
+      </div>
+    );
+  }
   
   return (
     <div className="min-h-screen w-full">
