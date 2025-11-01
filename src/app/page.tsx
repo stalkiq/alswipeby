@@ -13,7 +13,13 @@ export default function Home() {
     async function fetchData() {
       try {
         const data = await getData();
-        setInitialData(data);
+        // Sort alphabetically by business name
+        const sortedData = data.sort((a, b) => {
+          const nameA = (a.businessName || '').toLowerCase();
+          const nameB = (b.businessName || '').toLowerCase();
+          return nameA.localeCompare(nameB);
+        });
+        setInitialData(sortedData);
       } catch (error) {
         console.error('Error fetching initial data:', error);
         setInitialData([]);

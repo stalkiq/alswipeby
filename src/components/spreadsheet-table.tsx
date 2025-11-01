@@ -80,7 +80,14 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
   const handleSave = async () => {
     setIsPending(true);
     try {
-      const result = await saveSpreadsheetData(data);
+      // Sort data alphabetically by business name before saving
+      const sortedData = [...data].sort((a, b) => {
+        const nameA = (a.businessName || '').toLowerCase();
+        const nameB = (b.businessName || '').toLowerCase();
+        return nameA.localeCompare(nameB);
+      });
+      
+      const result = await saveSpreadsheetData(sortedData);
       if (result.success) {
         toast({
           title: 'Success!',
