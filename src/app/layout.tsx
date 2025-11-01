@@ -3,7 +3,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
 
 export const metadata: Metadata = {
-  title: 'Spreadsheet Saver',
+  title: 'Business Data',
   description: 'An online spreadsheet to save your business data.',
 };
 
