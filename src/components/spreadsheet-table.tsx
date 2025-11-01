@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlusCircle, Trash2, Save, Loader2 } from 'lucide-react';
 
 const columns: { id: keyof Omit<BusinessData, 'docId'>; label: string }[] = [
@@ -90,7 +90,6 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
       <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <CardTitle>Business Information</CardTitle>
-          <CardDescription>Add, edit, and save business details.</CardDescription>
         </div>
         <div className="flex gap-2 self-start md:self-center">
           <Button onClick={addRow} variant="outline">
