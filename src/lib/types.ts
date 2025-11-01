@@ -3,9 +3,8 @@ export type BusinessData = {
   businessName: string;
   address: string;
   phone: string;
+  website: string;
   instagramUrl: string;
   instagramPresent: string;
-  website: string;
-  onlineOn: string;
   notes: string;
 };

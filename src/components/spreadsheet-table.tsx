@@ -32,10 +32,9 @@ const columns: { id: keyof Omit<BusinessData, 'docId' | 'notes'>; label: string 
     { id: 'businessName', label: 'Business Name' },
     { id: 'address', label: 'Address' },
     { id: 'phone', label: 'Phone' },
+    { id: 'website', label: 'Website' },
     { id: 'instagramUrl', label: 'Instagram URL' },
     { id: 'instagramPresent', label: 'Instagram Present' },
-    { id: 'website', label: 'Website' },
-    { id: 'onlineOn', label: 'Online on' },
 ];
 
 export default function SpreadsheetTable({ initialData }: { initialData: BusinessData[] }) {
@@ -65,10 +64,9 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
       businessName: '',
       address: '',
       phone: '',
+      website: '',
       instagramUrl: '',
       instagramPresent: '',
-      website: '',
-      onlineOn: '',
       notes: '',
     };
     setData([...data, newRow]);

@@ -95,10 +95,9 @@ let mockDatabase: BusinessData[] = [
     businessName: 'The Coffee Shop',
     address: '123 Main St, Anytown, 12345',
     phone: '555-1234',
+    website: 'https://coffeeshop.com',
     instagramUrl: 'https://instagram.com/coffeeshop',
     instagramPresent: 'Yes',
-    website: 'https://coffeeshop.com',
-    onlineOn: '2024-05-21',
     notes: 'A popular spot for locals. Great espresso.',
   },
   {
@@ -106,10 +105,9 @@ let mockDatabase: BusinessData[] = [
     businessName: 'Bookworm Reads',
     address: '456 Oak Ave, Reader-ville, 54321',
     phone: '555-5678',
+    website: 'https://bookwormreads.com',
     instagramUrl: 'https://instagram.com/bookwormreads',
     instagramPresent: 'Yes',
-    website: 'https://bookwormreads.com',
-    onlineOn: '2024-05-22',
     notes: 'Cozy atmosphere. Has a rare books section in the back.',
   },
 ];
