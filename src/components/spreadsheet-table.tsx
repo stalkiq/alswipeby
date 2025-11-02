@@ -26,7 +26,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog"
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PlusCircle, Trash2, Save, Loader2, FileText, Clock } from 'lucide-react';
+import { PlusCircle, Trash2, Save, Loader2, FileText, Clock, Search } from 'lucide-react';
 
 const columns: { id: keyof Omit<BusinessData, 'docId' | 'notes' | 'noteHistory'>; label: string }[] = [
     { id: 'businessName', label: 'Business Name' },
@@ -43,6 +43,7 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
   const [isPending, setIsPending] = useState(false);
   const { toast } = useToast();
   const [editingNote, setEditingNote] = useState<{ rowIndex: number; notes: string } | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   const handleInputChange = (rowIndex: number, columnId: keyof Omit<BusinessData, 'docId' | 'notes'>, value: string) => {
     const newData = [...data];
@@ -136,11 +137,28 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
     }
   };
 
+  // Filter data based on search query
+  const filteredData = data.filter((row) => {
+    if (!searchQuery.trim()) return true;
+    const query = searchQuery.toLowerCase();
+    return row.businessName?.toLowerCase().includes(query);
+  });
+
   return (
     <Card>
       <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div>
+        <div className="flex items-center gap-4 flex-1">
           <CardTitle>Business Information</CardTitle>
+          <div className="relative max-w-sm">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="Search businesses..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9 w-full md:w-[300px]"
+            />
+          </div>
         </div>
         <div className="flex gap-2 self-start md:self-center">
           <Button onClick={addRow} variant="outline">
@@ -170,15 +188,25 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data.map((row, rowIndex) => (
-                <TableRow key={row.docId || rowIndex}>
+              {filteredData.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={columns.length + 1} className="text-center py-8 text-muted-foreground">
+                    {searchQuery ? `No businesses found matching "${searchQuery}"` : 'No data available. Click "Add Row" to get started.'}
+                  </TableCell>
+                </TableRow>
+              ) : (
+                filteredData.map((row, rowIndex) => {
+                  // Get the original index for editing
+                  const originalIndex = data.findIndex(d => d.docId === row.docId || (d === row));
+                  return (
+                <TableRow key={row.docId || originalIndex}>
                   <TableCell className="sticky left-0 bg-card z-10">
                      <Dialog onOpenChange={(open) => !open && setEditingNote(null)}>
                       <DialogTrigger asChild>
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={() => setEditingNote({ rowIndex, notes: row.notes || '' })}
+                          onClick={() => setEditingNote({ rowIndex: originalIndex, notes: row.notes || '' })}
                         >
                           <FileText className="h-4 w-4" />
                         </Button>
@@ -260,7 +288,7 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
                       <Input
                         type="text"
                         value={row[col.id]}
-                        onChange={(e) => handleInputChange(rowIndex, col.id, e.target.value)}
+                        onChange={(e) => handleInputChange(originalIndex, col.id, e.target.value)}
                         className="w-48"
                       />
                     </TableCell>
@@ -276,15 +304,12 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
                     </Button>
                   </TableCell> */}
                 </TableRow>
-              ))}
+                  );
+                })
+              )}
             </TableBody>
           </Table>
         </div>
-        {data.length === 0 && (
-          <div className="text-center p-8 text-muted-foreground">
-            No data here. Click "Add Row" to get started!
-          </div>
-        )}
       </CardContent>
     </Card>
   );
