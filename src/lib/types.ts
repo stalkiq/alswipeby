@@ -9,6 +9,7 @@ export type BusinessData = {
   address: string;
   phone: string;
   website: string;
+  google: string;
   instagramUrl: string;
   instagramPresent: string;
   notes: string;

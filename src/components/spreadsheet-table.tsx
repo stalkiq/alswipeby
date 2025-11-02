@@ -28,11 +28,12 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlusCircle, Trash2, Save, Loader2, FileText, Clock } from 'lucide-react';
 
-const columns: { id: keyof Omit<BusinessData, 'docId' | 'notes'>; label: string }[] = [
+const columns: { id: keyof Omit<BusinessData, 'docId' | 'notes' | 'noteHistory'>; label: string }[] = [
     { id: 'businessName', label: 'Business Name' },
     { id: 'address', label: 'Address' },
     { id: 'phone', label: 'Phone' },
     { id: 'website', label: 'Website' },
+    { id: 'google', label: 'Google' },
     { id: 'instagramUrl', label: 'Instagram URL' },
     { id: 'instagramPresent', label: 'Instagram Present' },
 ];
@@ -83,6 +84,7 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
       address: '',
       phone: '',
       website: '',
+      google: '',
       instagramUrl: '',
       instagramPresent: '',
       notes: '',
