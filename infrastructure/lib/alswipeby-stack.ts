@@ -9,6 +9,9 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 import * as events from 'aws-cdk-lib/aws-events';
 import * as targets from 'aws-cdk-lib/aws-events-targets';
 import * as cloudwatch from 'aws-cdk-lib/aws-cloudwatch';
+import * as certificatemanager from 'aws-cdk-lib/aws-certificatemanager';
+import * as route53 from 'aws-cdk-lib/aws-route53';
+import * as route53targets from 'aws-cdk-lib/aws-route53-targets';
 import { Construct } from 'constructs';
 import * as path from 'path';
 
@@ -277,6 +280,29 @@ export class AlswipebyStack extends cdk.Stack {
     });
 
     // ==========================================
+    // Route 53 Hosted Zone for Custom Domain
+    // ==========================================
+    const domainName = 'alswipeby.com';
+    
+    // If hosted zone already exists, use: route53.HostedZone.fromLookup(this, 'HostedZone', { domainName })
+    // Otherwise, this will create a new hosted zone
+    // Note: Domain must be registered first (via Route 53 or external registrar)
+    const hostedZone = new route53.HostedZone(this, 'HostedZone', {
+      zoneName: domainName,
+      comment: 'Hosted zone for alswipeby.com',
+    });
+
+    // ==========================================
+    // SSL Certificate for Custom Domain
+    // ==========================================
+    // Certificate must be in us-east-1 for CloudFront
+    const certificate = new certificatemanager.Certificate(this, 'DomainCertificate', {
+      domainName: domainName,
+      subjectAlternativeNames: [`www.${domainName}`], // Also cover www.alswipeby.com
+      validation: certificatemanager.CertificateValidation.fromDns(hostedZone),
+    });
+
+    // ==========================================
     // CloudFront Distribution
     // ==========================================
     const distribution = new cloudfront.Distribution(this, 'WebsiteDistribution', {
@@ -291,6 +317,8 @@ export class AlswipebyStack extends cdk.Stack {
         cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
       },
       defaultRootObject: 'index.html',
+      domainNames: [domainName, `www.${domainName}`], // Support both alswipeby.com and www.alswipeby.com
+      certificate: certificate,
       errorResponses: [
         {
           httpStatus: 403,
@@ -308,6 +336,37 @@ export class AlswipebyStack extends cdk.Stack {
       priceClass: cloudfront.PriceClass.PRICE_CLASS_100, // US, Canada, Europe
       enabled: true,
       comment: 'Alswipeby spreadsheet application',
+    });
+
+    // ==========================================
+    // Route 53 Records for Custom Domain
+    // ==========================================
+    // A record for alswipeby.com
+    new route53.ARecord(this, 'DomainARecord', {
+      zone: hostedZone,
+      recordName: domainName,
+      target: route53.RecordTarget.fromAlias(new route53targets.CloudFrontTarget(distribution)),
+    });
+
+    // AAAA record for IPv6 support
+    new route53.AaaaRecord(this, 'DomainAaaaRecord', {
+      zone: hostedZone,
+      recordName: domainName,
+      target: route53.RecordTarget.fromAlias(new route53targets.CloudFrontTarget(distribution)),
+    });
+
+    // A record for www.alswipeby.com
+    new route53.ARecord(this, 'WwwDomainARecord', {
+      zone: hostedZone,
+      recordName: `www.${domainName}`,
+      target: route53.RecordTarget.fromAlias(new route53targets.CloudFrontTarget(distribution)),
+    });
+
+    // AAAA record for www.alswipeby.com IPv6 support
+    new route53.AaaaRecord(this, 'WwwDomainAaaaRecord', {
+      zone: hostedZone,
+      recordName: `www.${domainName}`,
+      target: route53.RecordTarget.fromAlias(new route53targets.CloudFrontTarget(distribution)),
     });
 
     // ==========================================
@@ -353,6 +412,24 @@ export class AlswipebyStack extends cdk.Stack {
       value: backupLambda.functionName,
       description: 'Lambda function that performs daily backups',
       exportName: 'AlswipebyBackupFunction',
+    });
+
+    new cdk.CfnOutput(this, 'CustomDomainName', {
+      value: domainName,
+      description: 'Custom domain name for the website',
+      exportName: 'AlswipebyDomainName',
+    });
+
+    new cdk.CfnOutput(this, 'HostedZoneId', {
+      value: hostedZone.hostedZoneId,
+      description: 'Route 53 Hosted Zone ID',
+      exportName: 'AlswipebyHostedZoneId',
+    });
+
+    new cdk.CfnOutput(this, 'CertificateArn', {
+      value: certificate.certificateArn,
+      description: 'ACM Certificate ARN for the custom domain',
+      exportName: 'AlswipebyCertificateArn',
     });
   }
 }
