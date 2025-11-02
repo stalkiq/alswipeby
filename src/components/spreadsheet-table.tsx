@@ -35,7 +35,6 @@ const columns: { id: keyof Omit<BusinessData, 'docId' | 'notes' | 'noteHistory'>
     { id: 'website', label: 'Website' },
     { id: 'google', label: 'Google' },
     { id: 'instagramUrl', label: 'Instagram URL' },
-    { id: 'instagramPresent', label: 'Instagram Present' },
 ];
 
 export default function SpreadsheetTable({ initialData }: { initialData: BusinessData[] }) {
@@ -87,7 +86,6 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
       website: '',
       google: '',
       instagramUrl: '',
-      instagramPresent: '',
       notes: '',
       noteHistory: [],
     };

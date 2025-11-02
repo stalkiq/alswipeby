@@ -11,7 +11,6 @@ export type BusinessData = {
   website: string;
   google: string;
   instagramUrl: string;
-  instagramPresent: string;
   notes: string;
   noteHistory?: NoteHistoryEntry[];
 };

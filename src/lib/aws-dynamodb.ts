@@ -98,7 +98,6 @@ let mockDatabase: BusinessData[] = [
     website: 'https://coffeeshop.com',
     google: '',
     instagramUrl: 'https://instagram.com/coffeeshop',
-    instagramPresent: 'Yes',
     notes: 'A popular spot for locals. Great espresso.',
   },
   {
@@ -109,7 +108,6 @@ let mockDatabase: BusinessData[] = [
     website: 'https://bookwormreads.com',
     google: '',
     instagramUrl: 'https://instagram.com/bookwormreads',
-    instagramPresent: 'Yes',
     notes: 'Cozy atmosphere. Has a rare books section in the back.',
   },
 ];
