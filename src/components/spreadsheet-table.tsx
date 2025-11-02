@@ -180,7 +180,8 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
           <Table className="min-w-max">
             <TableHeader>
               <TableRow>
-                <TableHead className="sticky left-0 bg-card z-10">Notes</TableHead>
+                <TableHead className="sticky left-0 bg-card z-10 w-12 text-center">#</TableHead>
+                <TableHead className="sticky left-12 bg-card z-10">Notes</TableHead>
                 {columns.map((col) => (
                   <TableHead key={col.id} className="whitespace-nowrap">{col.label}</TableHead>
                 ))}
@@ -190,7 +191,7 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
             <TableBody>
               {filteredData.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={columns.length + 1} className="text-center py-8 text-muted-foreground">
+                  <TableCell colSpan={columns.length + 2} className="text-center py-8 text-muted-foreground">
                     {searchQuery ? `No businesses found matching "${searchQuery}"` : 'No data available. Click "Add Row" to get started.'}
                   </TableCell>
                 </TableRow>
@@ -200,7 +201,10 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
                   const originalIndex = data.findIndex(d => d.docId === row.docId || (d === row));
                   return (
                 <TableRow key={row.docId || originalIndex}>
-                  <TableCell className="sticky left-0 bg-card z-10">
+                  <TableCell className="sticky left-0 bg-card z-10 text-center">
+                    <span className="text-xs text-muted-foreground/60 font-mono">{rowIndex + 1}</span>
+                  </TableCell>
+                  <TableCell className="sticky left-12 bg-card z-10">
                      <Dialog onOpenChange={(open) => !open && setEditingNote(null)}>
                       <DialogTrigger asChild>
                         <Button
