@@ -129,7 +129,7 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
         variant: 'destructive',
         title: 'Error',
         description: 'Failed to save data',
-      });
+    });
     } finally {
       setIsPending(false);
     }
@@ -225,15 +225,15 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
                             <label htmlFor="notes" className="text-sm font-medium">
                               Notes
                             </label>
-                            <Textarea
-                              id="notes"
+                          <Textarea
+                            id="notes"
                               value={editingNote?.notes || ''}
-                              onChange={(e) =>
-                                editingNote && setEditingNote({ ...editingNote, notes: e.target.value })
-                              }
-                              className="col-span-3 min-h-[150px]"
-                              placeholder="Type your notes here."
-                            />
+                            onChange={(e) =>
+                              editingNote && setEditingNote({ ...editingNote, notes: e.target.value })
+                            }
+                            className="col-span-3 min-h-[150px]"
+                             placeholder="Type your notes here."
+                          />
                           </div>
                           
                           {/* Note History */}
@@ -289,10 +289,9 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
                     <TableCell key={col.id}>
                       <Input
                         type="text"
-                        value={row[col.id] || ''}
+                        value={row[col.id]}
                         onChange={(e) => handleInputChange(originalIndex, col.id, e.target.value)}
                         className="w-48"
-                        readOnly={row.docId !== '' && (row[col.id] || '').trim() !== ''}
                       />
                     </TableCell>
                   ))}
