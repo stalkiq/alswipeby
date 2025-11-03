@@ -289,9 +289,10 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
                     <TableCell key={col.id}>
                       <Input
                         type="text"
-                        value={row[col.id]}
+                        value={row[col.id] || ''}
                         onChange={(e) => handleInputChange(originalIndex, col.id, e.target.value)}
                         className="w-48"
+                        readOnly
                       />
                     </TableCell>
                   ))}
