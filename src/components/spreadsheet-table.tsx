@@ -144,44 +144,47 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
 
   return (
     <Card>
-      <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div className="flex items-center gap-4 flex-1">
-          <CardTitle>Business Information</CardTitle>
-          <div className="relative max-w-sm">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              type="text"
-              placeholder="Search businesses..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 w-full md:w-[300px]"
-            />
+      <CardHeader className="flex flex-col gap-3 p-4 md:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <CardTitle className="text-xl md:text-2xl">Business Information</CardTitle>
+          <div className="flex gap-2 flex-wrap">
+            <Button onClick={addRow} variant="outline" size="sm" className="flex-1 sm:flex-none">
+              <PlusCircle className="mr-2 h-4 w-4" />
+              Add Row
+            </Button>
+            <Button onClick={handleSave} disabled={isPending} variant="default" size="sm" className="bg-accent hover:bg-accent/90 text-accent-foreground flex-1 sm:flex-none">
+              {isPending ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Save className="mr-2 h-4 w-4" />
+              )}
+              {isPending ? 'Saving...' : 'Save'}
+            </Button>
           </div>
         </div>
-        <div className="flex gap-2 self-start md:self-center">
-          <Button onClick={addRow} variant="outline">
-            <PlusCircle className="mr-2 h-4 w-4" />
-            Add Row
-          </Button>
-          <Button onClick={handleSave} disabled={isPending} variant="default" className="bg-accent hover:bg-accent/90 text-accent-foreground">
-            {isPending ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              <Save className="mr-2 h-4 w-4" />
-            )}
-            {isPending ? 'Saving...' : 'Save'}
-          </Button>
+        <div className="relative w-full">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground z-10" />
+          <Input
+            type="text"
+            placeholder="Search businesses..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-9 w-full"
+          />
         </div>
       </CardHeader>
-      <CardContent>
-        <div className="relative w-full overflow-auto rounded-md border">
+      <CardContent className="p-0 sm:p-6">
+        <div className="text-xs text-muted-foreground px-4 py-2 bg-muted/50 sm:hidden">
+          👈 Swipe left to see more columns
+        </div>
+        <div className="relative w-full overflow-x-auto rounded-md border-t sm:border">
           <Table className="min-w-max">
             <TableHeader>
               <TableRow>
-                <TableHead className="sticky left-0 bg-card z-10 w-12 text-center">#</TableHead>
-                <TableHead className="sticky left-12 bg-card z-10">Notes</TableHead>
+                <TableHead className="sticky left-0 bg-card z-10 w-10 sm:w-12 text-center text-xs sm:text-sm">#</TableHead>
+                <TableHead className="sticky left-10 sm:left-12 bg-card z-10 min-w-[60px] text-xs sm:text-sm">Notes</TableHead>
                 {columns.map((col) => (
-                  <TableHead key={col.id} className="whitespace-nowrap">{col.label}</TableHead>
+                  <TableHead key={col.id} className="whitespace-nowrap min-w-[140px] sm:min-w-[180px] text-xs sm:text-sm">{col.label}</TableHead>
                 ))}
                 {/* <TableHead className="sticky right-0 bg-card">Actions</TableHead> */}
               </TableRow>
@@ -199,24 +202,25 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
                   const originalIndex = data.findIndex(d => d.docId === row.docId || (d === row));
                   return (
                 <TableRow key={row.docId || originalIndex}>
-                  <TableCell className="sticky left-0 bg-card z-10 text-center">
-                    <span className="text-xs text-muted-foreground/60 font-mono">{rowIndex + 1}</span>
+                  <TableCell className="sticky left-0 bg-card z-10 text-center p-2 sm:p-4">
+                    <span className="text-[10px] sm:text-xs text-muted-foreground/60 font-mono">{rowIndex + 1}</span>
                   </TableCell>
-                  <TableCell className="sticky left-12 bg-card z-10">
+                  <TableCell className="sticky left-10 sm:left-12 bg-card z-10 p-2 sm:p-4">
                      <Dialog onOpenChange={(open) => !open && setEditingNote(null)}>
                       <DialogTrigger asChild>
                         <Button
                           variant="ghost"
-                          size="icon"
+                          size="sm"
+                          className="h-8 w-8 p-0"
                           onClick={() => setEditingNote({ rowIndex: originalIndex, notes: row.notes || '' })}
                         >
-                          <FileText className="h-4 w-4" />
+                          <FileText className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                         </Button>
                       </DialogTrigger>
-                      <DialogContent className="sm:max-w-[425px]">
+                      <DialogContent className="sm:max-w-[425px] max-w-[95vw] max-h-[90vh] overflow-y-auto">
                         <DialogHeader>
-                          <DialogTitle>Edit Notes</DialogTitle>
-                          <DialogDescription>
+                          <DialogTitle className="text-lg">Edit Notes</DialogTitle>
+                          <DialogDescription className="text-sm">
                             Add or edit notes for {row.businessName || 'this business'}. Click save when you're done.
                           </DialogDescription>
                         </DialogHeader>
@@ -286,12 +290,12 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
                     </Dialog>
                   </TableCell>
                   {columns.map((col) => (
-                    <TableCell key={col.id}>
+                    <TableCell key={col.id} className="p-2 sm:p-4">
                       <Input
                         type="text"
                         value={row[col.id]}
                         onChange={(e) => handleInputChange(originalIndex, col.id, e.target.value)}
-                        className="w-48"
+                        className="w-32 sm:w-48 text-sm"
                       />
                     </TableCell>
                   ))}
