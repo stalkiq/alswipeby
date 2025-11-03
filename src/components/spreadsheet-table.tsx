@@ -292,7 +292,7 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
                         value={row[col.id] || ''}
                         onChange={(e) => handleInputChange(originalIndex, col.id, e.target.value)}
                         className="w-48"
-                        readOnly
+                        readOnly={row.docId !== ''}
                       />
                     </TableCell>
                   ))}
