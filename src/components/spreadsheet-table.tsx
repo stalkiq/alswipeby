@@ -1,12 +1,19 @@
 "use client";
 
 import { useState } from 'react';
-import type { BusinessData } from '@/lib/types';
+import type { BusinessData, ContactStage } from '@/lib/types';
 import { saveSpreadsheetData } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import {
   Table,
   TableBody,
@@ -28,7 +35,34 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlusCircle, Trash2, Save, Loader2, FileText, Clock, Search } from 'lucide-react';
 
-const columns: { id: keyof Omit<BusinessData, 'docId' | 'notes' | 'noteHistory'>; label: string }[] = [
+const contactStages: ContactStage[] = [
+  'New Lead',
+  'Walked In',
+  'Initial Contact',
+  'Spoke with Owner',
+  'Demo Scheduled',
+  'Demo Completed',
+  'Follow-up',
+  'Closed/Won',
+  'Not Interested',
+];
+
+const getStageColor = (stage: ContactStage): string => {
+  const colors: Record<ContactStage, string> = {
+    'New Lead': 'bg-blue-100 text-blue-800 border-blue-200',
+    'Walked In': 'bg-amber-100 text-amber-800 border-amber-200',
+    'Initial Contact': 'bg-gray-100 text-gray-800 border-gray-200',
+    'Spoke with Owner': 'bg-purple-100 text-purple-800 border-purple-200',
+    'Demo Scheduled': 'bg-orange-100 text-orange-800 border-orange-200',
+    'Demo Completed': 'bg-green-100 text-green-800 border-green-200',
+    'Follow-up': 'bg-teal-100 text-teal-800 border-teal-200',
+    'Closed/Won': 'bg-emerald-100 text-emerald-800 border-emerald-200',
+    'Not Interested': 'bg-rose-100 text-rose-800 border-rose-200',
+  };
+  return colors[stage];
+};
+
+const columns: { id: keyof Omit<BusinessData, 'docId' | 'notes' | 'noteHistory' | 'contactStage'>; label: string }[] = [
     { id: 'businessName', label: 'Business Name' },
     { id: 'address', label: 'Address' },
     { id: 'phone', label: 'Phone' },
@@ -87,6 +121,7 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
       google: '',
       instagramUrl: '',
       notes: '',
+      contactStage: 'New Lead',
       noteHistory: [],
     };
     setData([...data, newRow]);
@@ -183,6 +218,7 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
               <TableRow>
                 <TableHead className="sticky left-0 bg-card z-10 w-10 sm:w-12 text-center text-xs sm:text-sm">#</TableHead>
                 <TableHead className="sticky left-10 sm:left-12 bg-card z-10 min-w-[60px] text-xs sm:text-sm">Notes</TableHead>
+                <TableHead className="whitespace-nowrap min-w-[160px] text-xs sm:text-sm">Contact Stage</TableHead>
                 {columns.map((col) => (
                   <TableHead key={col.id} className="whitespace-nowrap min-w-[140px] sm:min-w-[180px] text-xs sm:text-sm">{col.label}</TableHead>
                 ))}
@@ -192,7 +228,7 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
             <TableBody>
               {filteredData.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={columns.length + 2} className="text-center py-8 text-muted-foreground">
+                  <TableCell colSpan={columns.length + 3} className="text-center py-8 text-muted-foreground">
                     {searchQuery ? `No businesses found matching "${searchQuery}"` : 'No data available. Click "Add Row" to get started.'}
                   </TableCell>
                 </TableRow>
@@ -288,6 +324,29 @@ export default function SpreadsheetTable({ initialData }: { initialData: Busines
                         </DialogFooter>
                       </DialogContent>
                     </Dialog>
+                  </TableCell>
+                  <TableCell className="p-2 sm:p-4">
+                    <Select
+                      value={row.contactStage}
+                      onValueChange={(value) => handleInputChange(originalIndex, 'contactStage', value as ContactStage)}
+                    >
+                      <SelectTrigger className={`w-36 sm:w-44 text-xs sm:text-sm ${getStageColor(row.contactStage)} border`}>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {contactStages.map((stage) => (
+                          <SelectItem 
+                            key={stage} 
+                            value={stage}
+                            className="text-xs sm:text-sm"
+                          >
+                            <span className={`inline-block px-2 py-0.5 rounded-full text-xs ${getStageColor(stage)}`}>
+                              {stage}
+                            </span>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </TableCell>
                   {columns.map((col) => (
                     <TableCell key={col.id} className="p-2 sm:p-4">

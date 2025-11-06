@@ -3,6 +3,17 @@ export type NoteHistoryEntry = {
   timestamp: string;
 };
 
+export type ContactStage = 
+  | 'New Lead'
+  | 'Walked In'
+  | 'Initial Contact'
+  | 'Spoke with Owner'
+  | 'Demo Scheduled'
+  | 'Demo Completed'
+  | 'Follow-up'
+  | 'Closed/Won'
+  | 'Not Interested';
+
 export type BusinessData = {
   docId: string;
   businessName: string;
@@ -12,5 +23,6 @@ export type BusinessData = {
   google: string;
   instagramUrl: string;
   notes: string;
+  contactStage: ContactStage;
   noteHistory?: NoteHistoryEntry[];
 };
